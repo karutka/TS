@@ -1,0 +1,12 @@
+{
+  "name": "task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "build": "webpack --config webpack.config.prod.js",
+      "start": "webpack serve --config webpack.config.dev.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
