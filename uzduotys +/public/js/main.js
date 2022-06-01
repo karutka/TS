@@ -1,131 +1,118 @@
 "use strict";
-const numbers = [1, 2, 3, 4, 5, 6, 7];
-const strings = ['pirmadienis', 'antradienis', 'trečiadienis', 'ketvirtadienis', 'penktadienis', 'šeštadienis', 'sekmadienis'];
-const booleans = [true, true, true, true, false];
-console.group('1. Parašykite funkciją, kuri grąžina pirmą masyvo elementą.');
-{
-    const solution = (arr) => {
-        return arr[0];
-    };
-    console.log({ numbers, result: solution(numbers) });
-    console.log({ strings, result: solution(strings) });
-    console.log({ booleans, result: solution(booleans) });
-}
-console.groupEnd();
-console.group('2. Parašykite funkciją, kuri grąžina paskutinį masyvo elementą.');
-{
-    const solution = (arr) => {
-        return arr[arr.length - 1];
-    };
-    console.log({ numbers, result: solution(numbers) });
-    console.log({ strings, result: solution(strings) });
-    console.log({ booleans, result: solution(booleans) });
-}
-console.groupEnd();
-console.group('3. Parašykite funkciją, kuri grąžina vienarūšių primityvių reikšmių masyvo kopiją');
-{
-    const solution = (arr) => {
-        const copy = arr.map(x => x);
-        return copy;
-    };
-    console.log({ numbers, result: solution(numbers) });
-    console.log({ strings, result: solution(strings) });
-    console.log({ booleans, result: solution(booleans) });
-}
-console.groupEnd();
-console.group('4. Parašykite funkciją,  kuri pirmu parametru priima string | number | boolen, grąžina to tipo masyvą su perduota reikšme tiek kartų, kiek nurodyta antru parametru');
-{
-    const solution = (value, count) => {
-        return Array.from(new Array(count)).map(_ => value);
-    };
-    const dataSamples = [
-        ['a', 2],
-        [77, 4],
-        [true, 1],
-    ];
-    dataSamples.forEach((args) => console.log(`solution(${args.join(', ')}):`, solution(...args)));
-}
-console.groupEnd();
-console.group('5. Parašykite funkciją, kuri sujungia tokių pat tipų masyvus į vieną masyvą');
-{
-    const solution = (arr1, arr2) => {
-        return [...arr1, ...arr2];
-    };
-    const args1 = [[1, 2, 3], [4, 5, 6]];
-    const args2 = [['labas', 'mano', 'vardas'], ['yra', 'ponas', 'krabas']];
-    const args3 = [[true, true, true], [false, false, false]];
-    console.log({ args: args1, result: solution(...args1) });
-    console.log({ args: args2, result: solution(...args2) });
-    console.log({ args: args3, result: solution(...args3) });
-}
-console.groupEnd();
-console.group('6. Parašykite funkciją, kuri priimtų bet kokią reikšmę ir grąžintų objektą su savybėmis-funkcijomis "setValue" - reikšmei nustatyti ir "getValue" tai reikšmei nustatyti. Funkcijai perduota reikšmė neturi būti pasiekiama tiesiogiai.');
-{
-    const solution = (initialValue) => {
-        let value = initialValue;
-        return {
-            setValue: (newValue) => value = newValue,
-            getValue: () => value,
+class List {
+    constructor(initialNode) {
+        this.addFirstElement = (node) => {
+            this.head = node;
+            this.tail = node;
         };
-    };
-    const value1 = 7;
-    const value2 = ["Sidnius", "Mauricijus", "Penktasis"];
-    const value3 = { name: 'Fanatijus', surname: 'Labdara' };
-    const obj1 = solution(value1);
-    const obj2 = solution(value2);
-    const obj3 = solution(value3);
-    console.log('initial values');
+        this.addNodeStart = (node) => {
+            if (this.head === null) {
+                this.addFirstElement(node);
+            }
+            else {
+                node.next = this.head;
+                this.head = node;
+            }
+        };
+        this.addNodeEnd = (node) => {
+            if (this.tail === null) {
+                this.addFirstElement(node);
+            }
+            else {
+                this.tail.next = node;
+                this.tail = node;
+            }
+        };
+        this.forEach = (callback) => {
+            if (this.head === null)
+                return;
+            let currentNode = this.head;
+            while (true) {
+                callback(currentNode.data);
+                if (currentNode.next === null)
+                    break;
+                currentNode = currentNode.next;
+            }
+        };
+        if (initialNode !== undefined) {
+            this.head = initialNode;
+            this.tail = initialNode;
+        }
+        else {
+            this.head = null;
+            this.tail = null;
+        }
+    }
+}
+const stringNode1 = { data: 'running', next: null };
+const stringNode2 = { data: 'cycling', next: stringNode1 };
+const stringList = new List();
+const numberNode = { data: 21, next: null };
+const numberList = new List(numberNode);
+const stringNodeToAdd1 = { data: 'cherry', next: null };
+const stringNodeToAdd2 = { data: 'blueberry', next: null };
+const stringNodeToAdd3 = { data: 'cranberry', next: null };
+const numberNodeToAdd1 = { data: 3, next: null };
+const numberNodeToAdd2 = { data: 2, next: null };
+const numberNodeToAdd3 = { data: 1, next: null };
+console.group('1. Sukurkitę sąrašo mazgo struktūrą ListNode, bet kokiam duomenų tipui');
+{
     console.log({
-        value1: obj1.getValue(),
-        value2: obj2.getValue(),
-        value3: obj3.getValue(),
+        listNode1: stringNode1,
+        listNode2: stringNode2,
     });
-    console.log('changing values...');
-    obj1.setValue(9);
-    obj2.setValue(['Pakeista']);
-    obj3.setValue({ name: 'Pakaitalas', surname: 'Fuflo' });
 }
 console.groupEnd();
-console.group(`
-  7. Turite 2 tipus: Student ir Worker kurie pasižymi bendrais bruožais Person. 
-  Parašykite 2 funkcijas <isStudent> ir <isWorker> skirtas atpažinti koks objektas buvo perduotas.
-  Sukūrę tokias funkcijas iteruokite per žmonių masyvą, sugrupuodami elementus pagal tipą`);
+console.group('2. Sukurkite sąrašo klasę List');
 {
-    const isWorker = (person) => {
-        return person.avgMonthlyPay !== undefined;
-    };
-    const isStudent = (person) => {
-        const student = person;
-        return student.university !== undefined && student.course !== undefined;
-    };
-    const solution = (people) => {
-        const groupedPeople = people.reduce((prevGroupedPeople, person) => {
-            const newGroupedPeople = { ...prevGroupedPeople };
-            if (isWorker(person))
-                newGroupedPeople.workers.push(person);
-            if (isStudent(person))
-                newGroupedPeople.students.push(person);
-            else
-                newGroupedPeople.people.push(person);
-            return newGroupedPeople;
-        }, {
-            people: [],
-            students: [],
-            workers: [],
-        });
-        return groupedPeople;
-    };
-    const people = [
-        { name: 'Atstovė', surname: 'Galtokaitė', university: 'VU', course: 2 },
-        { name: 'Kurpius', surname: 'Medainis' },
-        { name: 'Varnas', surname: 'Akilaitis', avgMonthlyPay: 2000 },
-        { name: 'Ferodijus', surname: 'Cilcius' },
-        { name: 'Sobora', surname: 'Kupolaityė', avgMonthlyPay: 1000 },
-        { name: 'Zubrius', surname: 'Sulindauskas', university: 'VU', course: 2 },
-        { name: 'Šidelė', surname: 'Gyslovienė', avgMonthlyPay: 1500 },
-        { name: 'Užuodauskas', surname: 'Perrašimauskas', university: 'VGTU', course: 1 },
-    ];
-    const groupedPeople = solution(people);
-    console.log(groupedPeople);
+    console.log('empty string list');
+    console.log(stringList);
+    console.log('number list');
+    console.log(numberList);
 }
+console.groupEnd();
+console.group('3. Sukurkite metodą pridėti sąrašo elementui į sąrašo priekį.');
+{
+    console.log('String list');
+    console.log(stringList);
+    console.log('Adding Mazgas 1', stringNodeToAdd1);
+    stringList.addNodeStart(stringNodeToAdd1);
+    console.log('list after addition', { ...stringList });
+    console.log('Adding Mazgas 2', stringNodeToAdd2);
+    stringList.addNodeStart(stringNodeToAdd2);
+    console.log('list after addition', { ...stringList });
+    console.log('Adding Mazgas 3', stringNodeToAdd3);
+    stringList.addNodeStart(stringNodeToAdd3);
+    console.log('list after addition', { ...stringList });
+}
+console.groupEnd();
+console.group('4. Sukurkite metodą pridėti sąrašo elementui į sąrašo priekį.');
+{
+    console.log('Number list');
+    console.log(numberList);
+    console.log('Adding Mazgas 1', numberNodeToAdd1);
+    numberList.addNodeEnd(numberNodeToAdd1);
+    console.log('list after addition', { ...numberList });
+    console.log('Adding Mazgas 2', numberNodeToAdd2);
+    numberList.addNodeEnd(numberNodeToAdd2);
+    console.log('list after addition', { ...numberList });
+    console.log('Adding Mazgas 3', numberNodeToAdd3);
+    numberList.addNodeEnd(numberNodeToAdd3);
+    console.log('list after addition', { ...numberList });
+}
+console.groupEnd();
+console.group('5. Sukurkite metodą List.forEach klasėje List, kuris vykdytų parametru perduotą funkciją');
+{
+    console.log('printing string list');
+    stringList.forEach((str) => console.log(str));
+    const stringArr = [];
+    const putInStringArr = (x) => {
+        stringArr.push(String(x));
+    };
+    console.log('printing number list');
+    numberList.forEach(putInStringArr);
+    const numberListStringRepresentation = stringArr.join(' → ');
+    console.log(numberListStringRepresentation);
+}
+console.groupEnd();
 //# sourceMappingURL=main.js.map
