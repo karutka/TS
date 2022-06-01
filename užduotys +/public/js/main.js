@@ -1,179 +1,181 @@
 "use strict";
-const numbers = [5, 3, -49, 69, 34575, 0, -2, 567899999];
-const words = ['retriever', 'husky', 'bobteil', 'shepherd', 'dalmatian'];
-console.group('1. Parašykite funkciją, kuri atspausdina paskutinio masyvo elemento indeksą');
+const people = [
+    {
+        name: 'Jonas',
+        surname: 'Jonaitis',
+        sex: 'male',
+        age: 26,
+        income: 1200,
+        married: false,
+        hasCar: false,
+    },
+    {
+        name: 'Severija',
+        surname: 'Piktutytė',
+        sex: 'female',
+        age: 26,
+        income: 1300,
+        married: false,
+        hasCar: true,
+    },
+    {
+        name: 'Valdas',
+        surname: 'Vilktorinas',
+        sex: 'male',
+        age: 16,
+        income: 0,
+        married: false,
+        hasCar: false,
+    },
+    {
+        name: 'Virginijus',
+        surname: 'Uostauskas',
+        sex: 'male',
+        age: 32,
+        income: 2400,
+        married: true,
+        hasCar: true,
+    },
+    {
+        name: 'Samanta',
+        surname: 'Uostauskienė',
+        sex: 'female',
+        age: 28,
+        income: 1200,
+        married: true,
+        hasCar: true,
+    },
+    {
+        name: 'Janina',
+        surname: 'Stalautinskienė',
+        sex: 'female',
+        age: 72,
+        income: 364,
+        married: false,
+        hasCar: false,
+    },
+];
+console.groupCollapsed('1. Sukurkite funkciją, kuri paverčia žmogaus objektą -> {name: string, surname: string} objektu. Naudojant šią funkciją performuokite visą žmonių masyvą');
 {
-    function solution(arr) {
-        console.log(arr.length - 1);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const personToIdentity = ({ name, surname }) => {
+        return { name, surname };
+    };
+    const identities = people.map(personToIdentity);
+    console.table(people);
+    console.table(identities);
 }
 console.groupEnd();
-console.group('2. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento indeksus eilutėmis');
+console.groupCollapsed('2. Sukurkite funkciją, kuri paverčia žmogaus objektą -> {married: boolean, hasCar: boolean} objektu. Naudojant šią funkciją performuokite visą žmonių masyvą.');
 {
-    function solution(arr) {
-        for (let i = 0; i < arr.length; i++)
-            console.log(i);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const selectTaskProps = ({ married, hasCar }) => ({
+        married: Boolean(married),
+        hasCar: Boolean(hasCar),
+    });
+    const result = people.map(selectTaskProps);
+    console.table(people);
+    console.table(result);
 }
 console.groupEnd();
-console.group('3. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento reikšmes eilutėmis');
+console.groupCollapsed('3. Atspausdinkite objektus su visų žmonių vardais, pavardėm bei santuokos statusais');
 {
-    function solution(arr) {
-        for (let i = 0; i < arr.length; i++)
-            console.log(arr[i]);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const selectTaskProps = ({ name, surname, sex }) => ({
+        name, surname, sex
+    });
+    const result = people.map(selectTaskProps);
+    console.table(people);
+    console.table(result);
 }
 console.groupEnd();
-console.group('4. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento indekso ir reikšmių poras eilutėmis, tokiu formatu:  ');
+console.groupCollapsed('4. Sukurtite masyvą su lytimis ir uždirbamu pinigų kiekiu, pagal pradinį žmonių masyvą');
 {
-    function solution(arr) {
-        for (let i = 0; i < arr.length; i++)
-            console.log(`[${i}] => ${arr[i]}`);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const isMale = ({ sex }) => sex === 'male';
+    const males = people.filter(isMale);
+    console.table(people);
+    console.table(males);
 }
 console.groupEnd();
-console.group('5. Parašykite funkciją, kuri atspausdina masyvo elementus atbuline tvarka eilutėmis, iš galo.');
+console.groupCollapsed('5. Sukurtite masyvą su vardais, pavardėmis ir lytimi, pagal pradinį žmonių masyvą');
 {
-    function solution(arr) {
-        for (let i = arr.length - 1; i >= 0; i--)
-            console.log(arr[i]);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const isFemale = ({ sex }) => sex === 'female';
+    const females = people.filter(isFemale);
+    console.table(people);
+    console.table(females);
 }
 console.groupEnd();
-console.group('6. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento indeksus vienoje eilutėje: 0 1 2 3 ...');
+console.groupCollapsed('6. Atspausdinkite visus vyrus');
 {
-    function solution(arr) {
-        const res = arr.map((_, i) => i).join(' ');
-        console.log(res);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const personHasCar = ({ hasCar }) => Boolean(hasCar);
+    const createIdentity = ({ name, surname }) => ({ name, surname });
+    const identityReducer = (result, { hasCar, name, surname }) => {
+        if (hasCar)
+            result.push({ name, surname });
+        return result;
+    };
+    const peopleWithCars = people.filter(personHasCar);
+    const indentities = peopleWithCars.map(createIdentity);
+    const identitiess2 = people.reduce(identityReducer, []);
+    console.table(people);
+    console.table(indentities);
+    console.table(identitiess2);
 }
 console.groupEnd();
-console.group('7. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento reikšmes vienoje eilutėje: -111 2 -9 48 ...');
+console.groupCollapsed('7. Atspausdinkite visas moteris');
 {
-    function solution(arr) {
-        const res = arr.join(' ');
-        console.log(res);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const marriedReducer = (result, person) => {
+        if (person.married)
+            result.push(person);
+        return result;
+    };
+    const marriedPeople = people.reduce(marriedReducer, []);
+    console.table(people);
+    console.table(marriedPeople);
 }
 console.groupEnd();
-console.group('8. Parašykite funkciją, kuri atspausdina kiekvieno masyvo elemento indekso ir reikšmių poras vienoje eilutėje, tokiu formatu:');
+console.groupCollapsed('8. Atspausdinkite žmonių vardus ir pavardes, kurie turi mašinas');
 {
-    function solution(arr) {
-        const res = arr.map((x, i) => `[${i}]=>${x}`).join(', ');
-        console.log(res);
-    }
-    console.log(numbers);
-    solution(numbers);
-    console.log(words);
-    solution(words);
+    const groupCarOwnersBySexReducer = (result, person) => {
+        if (!person.hasCar)
+            return result;
+        if (!result[person.sex])
+            result[person.sex] = 0;
+        result[person.sex] = result[person.sex] + 1;
+        return result;
+    };
+    const groupedPeopleBySex = people.reduce(groupCarOwnersBySexReducer, {});
+    console.table(people);
+    console.log(groupedPeopleBySex);
 }
 console.groupEnd();
-console.group('9. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo elementų padaugintų iš 2');
+console.groupCollapsed('9. Atspausdinkite žmones kurie yra susituokę');
 {
-    function solution(arr) {
-        return arr.map(x => x * 2);
+    const convertToBritish = ({ income, ...person }) => {
+        const result = { ...person };
+        if (income)
+            result.salary = income;
+        return result;
+    };
+    const britishPeople = people.map(convertToBritish);
+    console.table(people);
+    console.table(britishPeople);
+    console.groupEnd();
+    console.groupCollapsed('10. Sukurkite objektą, kuriame būtų apskaičiuotas vairuojančių žmonių kiekis pagal lytį');
+    {
+        const createAnonymous = ({ name, surname, sex, ...anonPerson }) => anonPerson;
+        const anonymousPeople = people.map(createAnonymous);
+        console.table(people);
+        console.table(anonymousPeople);
     }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('10. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo elementų pakeltų kvadratu');
-{
-    function solution(arr) {
-        return arr.map(x => x ** 2);
+    console.groupEnd();
+    console.groupCollapsed('11. Performuokite žmonių masyvą, jog kiekvieno žmogaus savybė "income", taptų "salary"');
+    {
+        const createFullnamePerson = ({ name, surname, ...rest }) => ({
+            ...rest,
+            fullname: name + ' ' + surname
+        });
+        const fullnamePeople = people.map(createFullnamePerson);
+        console.table(people);
+        console.table(fullnamePeople);
     }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
+    console.groupEnd();
 }
-console.groupEnd();
-console.group('11. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo elementų ir jų indeksų sandaugos');
-{
-    function solution(arr) {
-        return arr.map((x, i) => x * i);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('12. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo teigiamų elementų');
-{
-    function solution(arr) {
-        return arr.filter((x) => x > 0);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('13. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo NE-teigiamų elementų');
-{
-    function solution(arr) {
-        return arr.filter((x) => x <= 0);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('14. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo lyginių elementų');
-{
-    function solution(arr) {
-        return arr.filter((x) => x % 2 === 0);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('15. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo nelyginių elementų');
-{
-    function solution(arr) {
-        return arr.filter((x) => Math.abs(x) % 2 === 1);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
-console.group('16. Sukurkite funkciją, kuri priima skaičių masyvą ir grąžina naują masyvą sudarytą iš pradinio masyvo, paverstų teigiamais, elementų');
-{
-    function solution(arr) {
-        return arr.map((x) => x < 0 ? x * -1 : x);
-    }
-    const result = solution(numbers);
-    console.log(numbers);
-    console.log(result);
-}
-console.groupEnd();
 //# sourceMappingURL=main.js.map
